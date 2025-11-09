@@ -63,5 +63,4 @@ Este projeto está sob a licença **MIT** - sinta-se livre para estudar, adaptar
 
 ## 👨‍💻 Desenvolvido por
 
-**Thiago Pereira**  
-🚀 Bootcamp DIO - 2025
+**Thiago Pereira**
