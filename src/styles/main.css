@@ -1,0 +1,302 @@
+:root{
+  /* tamanhos (desktop) */
+  --tile: 100px;
+  --gap: 12px;
+  --cols: 6; /* 6x4 = 24 cartas */
+
+  /* PALETA ARCADE QUENTE */
+  --arcade-red:    #e0003a;
+  --arcade-crimson:#8a1030;
+  --arcade-orange: #ff6a00;
+  --arcade-amber:  #ffbf3f;
+
+  /* painel do jogo (contraste) */
+  --panel-900: rgba(20,14,40,.92);
+  --panel-800: rgba(20,14,40,.78);
+
+  /* cartas (verso “coin”) */
+  --coin-1: #ffd56b;
+  --coin-2: #ffb25a;
+  --coin-border: #6b4a1b;
+
+  /* botões */
+  --btn-primary: #ffd54f;
+  --btn-secondary: #ffffff;
+
+  /* acentos HUD */
+  --hud-time:  #ff6767;  /* vermelho do timer */
+  --hud-moves: #ffbf3f;  /* âmbar das jogadas */
+  --hud-pairs: #47e57b;  /* verde de pares */
+}
+
+/* =================== FUNDO: ARCADE QUENTE =================== */
+body{
+  display:flex; justify-content:center; align-items:center;
+  min-height:100vh; user-select:none;
+
+  background:
+    radial-gradient(1100px 700px at 18% 12%, rgba(255,160,64,.55), transparent 60%),
+    radial-gradient(1000px 700px at 85% 88%, rgba(224,0,58,.45), transparent 60%),
+    linear-gradient(145deg, var(--arcade-crimson) 0%, #2a1030 40%, #0d0b1e 100%);
+
+  position: relative;
+}
+
+/* vinheta + brilho âmbar central */
+body::before{
+  content:"";
+  position: fixed; inset:0;
+  background:
+    radial-gradient(1200px 800px at 50% 42%, rgba(255,191,63,.18), transparent 65%),
+    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.28));
+  pointer-events:none;
+  z-index:0;
+}
+
+/* scanlines CRT */
+body.crt::after{
+  content:"";
+  position: fixed; inset:0;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 2px, transparent 2px 4px);
+  mix-blend-mode: soft-light;
+  opacity:.18;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* =================== PAINEL / CONTAINER =================== */
+.container{
+  z-index:1;
+  display:flex; flex-direction:column; align-items:center; gap:18px;
+  background: linear-gradient(180deg, var(--panel-900), var(--panel-800));
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.10) inset,
+    0 28px 72px rgba(0,0,0,.55),
+    0 0 48px rgba(224,0,58,.14);
+  padding:30px 36px;
+  backdrop-filter: blur(4px);
+  transition: box-shadow .35s ease, transform .25s ease;
+}
+
+/* glow dinâmico quando o jogo começa */
+.container.active{
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.12) inset,
+    0 34px 90px rgba(0,0,0,.6),
+    0 0 60px rgba(224,0,58,.22),
+    0 0 110px rgba(255,166,0,.18);
+  transform: translateY(-2px);
+}
+
+h2{
+  font-size:2.2rem; color:#fff; letter-spacing:.1em;
+  text-transform:uppercase; text-shadow:0 2px 0 rgba(0,0,0,.35);
+  margin-top: 2px;
+}
+
+/* =================== HUD =================== */
+.hud{
+  width:100%; display:flex; gap:14px; justify-content:space-between;
+  color:#f3f3f7; font-weight:800;
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+#time{  color: var(--hud-time);  }
+#moves{ color: var(--hud-moves); }
+#pairs{ color: var(--hud-pairs); }
+
+/* pisca quando faltam 10s */
+#time.danger{ animation: blink .8s steps(2,end) infinite; }
+@keyframes blink{ 50%{ opacity:.35 } }
+
+/* =================== AÇÕES =================== */
+.actions{ width:100%; display:flex; gap:10px; }
+
+/* Evita zoom automático do iOS ao focar botões */
+button, .btn { font-size: 16px; }
+
+.btn{
+  flex:1; padding:14px 16px; border:none; cursor:pointer;
+  text-transform:uppercase; letter-spacing:.08em; font-weight:800;
+  border-radius:12px; background: var(--btn-primary);
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,.25), 0 4px 10px rgba(0,0,0,.18);
+  transition: transform .05s ease, filter .15s ease;
+}
+.btn:hover{ filter:brightness(1.07); }
+.btn:active{ transform: translateY(1px); }
+.btn.btn-secondary{ background: var(--btn-secondary); }
+
+/* =================== GRADE =================== */
+.game{
+  display:grid;
+  grid-template-columns: repeat(var(--cols), var(--tile));
+  gap: var(--gap);
+  perspective: 900px;
+  transition: opacity .2s ease;
+  position: relative;
+}
+
+/* glow quente atrás do tabuleiro */
+.game::before{
+  content:"";
+  position:absolute; inset:-30px -26px -26px -26px;
+  background: radial-gradient(700px 380px at 50% 35%, rgba(255,136,0,.12), transparent 70%);
+  z-index:-1;
+  border-radius:24px;
+}
+
+.game.locked{ opacity:.9; cursor:not-allowed; }
+.game.locked .item{ pointer-events:none; }
+
+/* =================== CARTAS =================== */
+.item{
+  position:relative; width:var(--tile); height:var(--tile);
+  transform-style:preserve-3d;
+  transition: transform .28s ease, opacity .25s ease, filter .25s ease, box-shadow .2s ease;
+  transform: rotateY(180deg); /* começa virada */
+  border-radius:16px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.28);
+}
+
+/* hover neon – só quando não estiver aberta/match e não travado */
+.game:not(.locked) .item:not(.boxOpen):not(.boxMatch):hover{
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.18) inset,
+    0 0 22px rgba(255,136,0,.35),
+    0 10px 22px rgba(0,0,0,.28);
+  transform: translateY(-2px) rotateY(178deg);
+}
+
+.face{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:16px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+
+/* frente (emoji) — invisível até abrir */
+.front{
+  background:#fff;
+  transform: rotateY(180deg);
+  font-size: min(2.2rem, calc(var(--tile) * .68));
+  line-height:1; color:#111;
+  text-shadow: 0 1px 0 rgba(0,0,0,.08);
+  opacity:0; transition: opacity .2s ease;
+}
+
+/* verso “coin” com glow âmbar */
+.back{
+  background: linear-gradient(135deg, var(--coin-1), var(--coin-2));
+  border: 2px solid var(--coin-border);
+  box-shadow:
+    inset 0 0 24px rgba(255,255,255,.18),
+    0 6px 12px rgba(0,0,0,.22),
+    0 0 22px rgba(255,166,0,.25);
+  transform: rotateY(0deg);
+}
+
+/* abre */
+.item.boxOpen{ transform: rotateY(0deg); }
+.item.boxOpen .front{ transform: rotateY(0deg); opacity:1; }
+.item.boxOpen .back{  transform: rotateY(180deg); }
+
+/* acertou */
+.item.boxMatch{
+  transform: rotateY(0deg) scale(.98);
+  opacity:.34; filter: grayscale(1);
+  pointer-events:none;
+}
+.item.boxMatch .front{ opacity:1; }
+.item.boxMatch .back{ opacity:0; transform: rotateY(180deg); }
+
+/* =================== MODAL ARCADE =================== */
+.modal-backdrop{
+  position: fixed; inset:0; display:none; place-items:center;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+}
+.modal-backdrop.show{ display:grid; }
+
+.modal{
+  width:min(560px, 92vw);
+  background: linear-gradient(180deg, #5a3418, #3f240f);
+  color:#fff; border-radius:18px;
+  border:1px solid rgba(255,226,172,.28);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,.25) inset,
+    0 25px 80px rgba(0,0,0,.55),
+    0 0 40px rgba(224,0,58,.18);
+  padding:24px 22px 20px;
+  text-align:center;
+}
+.modal h3{
+  font-size:2rem; margin-bottom:6px;
+  text-shadow: 0 2px 0 rgba(0,0,0,.35);
+}
+.modal p{ opacity:.95; margin-bottom:10px; }
+.modal-stats{
+  display:flex; justify-content:space-around; gap:10px;
+  padding:10px 0 16px; color:#ffe6a9; font-weight:700;
+}
+.modal-actions{ display:flex; gap:10px; }
+.modal .btn{ background: var(--btn-primary); }
+.modal .btn.btn-secondary{ background: var(--btn-secondary); }
+
+/* ======================================================================
+   RESPONSIVO – “FIXO + MÉDIO (80×80)”
+   Mantém o visual do desktop e adapta para celular sem quebrar nada.
+   ====================================================================== */
+
+/* tablets/landscape médio — ajustes finos */
+@media (max-width: 1024px){
+  .container{ padding:26px 28px; }
+}
+
+/* break principal mobile: 4 colunas, 80×80 */
+@media (max-width: 600px){
+  :root{
+    --cols: 4;     /* 4 x 6 = 24 cartas */
+    --tile: 80px;  /* tamanho fixo médio */
+    --gap: 10px;
+  }
+
+  .container{
+    width: min(94vw, 520px);
+    padding: 22px 18px;
+    border-radius:16px;
+  }
+
+  h2{ font-size:1.6rem; letter-spacing:.08em; }
+
+  .hud{
+    font-size:.95rem;
+    gap:10px;
+  }
+
+  .actions .btn{
+    padding:12px 12px;
+    font-size:.95rem;
+    border-radius:10px;
+  }
+
+  .modal{
+    width: 92vw;
+    padding: 18px 16px;
+  }
+  .modal h3{ font-size:1.6rem; }
+  .modal-stats{ font-size:.95rem; }
+}
+
+/* telas muito estreitas – 72×72 pra caber bem */
+@media (max-width: 380px){
+  :root{
+    --tile: 72px;
+    --gap: 9px;
+  }
+  h2{ font-size:1.45rem; }
+  .hud{ font-size:.9rem; }
+  .actions .btn{ font-size:.9rem; padding:11px 10px; }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo da Memória</title>
+
+  <link rel="stylesheet" href="./src/styles/reset.css" />
+  <link rel="stylesheet" href="./src/styles/main.css" />
+</head>
+<body>
+  <div class="container" id="container">
+    <h2>JOGO DA MEMÓRIA</h2>
+
+    <div class="hud">
+      <div>⏱️ Tempo: <span id="time">90</span>s</div>
+      <div>🖱️ Jogadas: <span id="moves">0</span></div>
+      <div>✅ Pares: <span id="pairs">0</span>/12</div>
+    </div>
+
+    <div class="game locked"></div>
+
+    <div class="actions">
+      <button id="start" class="btn">INICIAR</button>
+      <button id="reset" class="btn btn-secondary">RESET</button>
+    </div>
+  </div>
+
+  <!-- Modal arcade -->
+  <div id="modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="modal-title">Título</h3>
+      <p id="modal-msg">Mensagem</p>
+      <div class="modal-stats">
+        <span>🖱️ Jogadas: <strong id="m-moves">0</strong></span>
+        <span>⏱️ Tempo: <strong id="m-time">0s</strong></span>
+      </div>
+      <div class="modal-actions">
+        <button id="modal-play" class="btn">JOGAR DE NOVO</button>
+        <button id="modal-close" class="btn btn-secondary">FECHAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SONS ====== -->
+  <!-- playsinline: melhora em iOS/Android -->
+  <audio id="s-flip"  src="./src/sounds/clique.wav"      preload="auto" playsinline></audio>
+  <audio id="s-good"  src="./src/sounds/acerto.wav"      preload="auto" playsinline></audio>
+  <audio id="s-end"   src="./src/sounds/fim de jogo.wav" preload="auto" playsinline></audio>
+
+  <script src="./src/scripts/engine.js" defer></script>
+</body>
+</html>
