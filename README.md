@@ -13,7 +13,7 @@ Projeto desenvolvido como parte do bootcamp da **DIO**, inspirado no clássico j
 O objetivo é encontrar todos os pares antes que o tempo acabe.  
 Cada jogada conta, e o jogo exibe **tempo, jogadas e pares feitos em tempo real**.
 
-🔗 **Jogar agora:**  
+🔗 **Jogo disponível aqui:**  
 https://thiago-pereira79.github.io/jogo-da-memoria/
 
 ---
