@@ -61,6 +61,4 @@ Este projeto está sob a licença **MIT** - sinta-se livre para estudar, adaptar
 
 ---
 
-## 👨‍💻 Desenvolvido por
-
 💻 Desenvolvido por **Thiago Pereira**
