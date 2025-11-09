@@ -8,7 +8,7 @@
 
 ## 🧠 Sobre o projeto
 
-Projeto desenvolvido como parte do bootcamp da **DIO**, inspirado no clássico jogo da memória — porém com melhorias visuais, efeitos sonoros e um layout em estilo **arcade moderno**.
+Projeto desenvolvido como parte do bootcamp da **DIO**, inspirado no clássico jogo da memória, porém com melhorias visuais, efeitos sonoros e um layout em estilo **arcade moderno**.
 
 O objetivo é encontrar todos os pares antes que o tempo acabe.  
 Cada jogada conta, e o jogo exibe **tempo, jogadas e pares feitos em tempo real**.
@@ -57,11 +57,11 @@ https://thiago-pereira79.github.io/jogo-da-memoria/
 
 ## 📄 Licença
 
-Este projeto está sob a licença **MIT** — sinta-se livre para estudar, adaptar ou evoluir.
+Este projeto está sob a licença **MIT** - sinta-se livre para estudar, adaptar ou evoluir.
 
 ---
 
 ## 👨‍💻 Desenvolvido por
 
 **Thiago Pereira**  
-🚀 Bootcamp DIO — 2025
+🚀 Bootcamp DIO - 2025
